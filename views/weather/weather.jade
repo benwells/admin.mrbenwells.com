@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 Weather
+  .row
+    div#mainapp
+    .container-fluid
+     .row
+      .col-md-4#locationCol
+      
+      .col-md-8
+        h3
+          | Mount Pleasant
+        p.text-muted
+          em
+            | Partly Cloudy with a chance of rain.
+        #tabs.tabbable
+          ul.nav.nav-tabs
+            li.active
+              a(href='#panel-806764', data-toggle='tab') Now
+            li
+              a(href='#panel-164917', data-toggle='tab') Forecast
+            li
+              a(href='#panel-164917', data-toggle='tab') Radar Map
+          .tab-content
+            #panel-806764.tab-pane.active
+              p
+                | I'm in Section 1.
+            #panel-164917.tab-pane
+              p
+                | Howdy, I'm in Section 2.
+
+
+  script(src='/js/weather/weather.js', type="text/babel")
