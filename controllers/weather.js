@@ -1,5 +1,11 @@
 var secrets = require('../config/secrets');
 var nodemailer = require("nodemailer");
+var request = require('request');
+var User = require('../models/User');
+// var mongoose = require('mongoose');
+var async = require('async');
+var _ = require('lodash');
+
 var transporter = nodemailer.createTransport({
   service: 'SendGrid',
   auth: {
@@ -16,6 +22,52 @@ exports.weatherHome = function(req, res) {
   res.render('weather/weather', {
     title: 'Weather'
   });
+};
+
+exports.locAutocomplete = function(req, res) {
+  var url = [
+    "https://maps.googleapis.com/maps/api/place/autocomplete/json?key=",
+    secrets.google.placesApiKey,
+    "&input=" + req.params['input']
+  ].join("");
+  request(url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      res.json(JSON.parse(body));
+    }
+  });
+};
+
+exports.getUserLocations = function (req, res) {
+  res.json({ weatherLocations: req.user.weatherLocations});
+};
+
+exports.addUserLocation = function (req, res) {
+  var description = req.body.description;
+  var locId = req.body.id;
+  var newLocation = { "description": description, "locId": locId} ;
+
+  User.findByIdAndUpdate(
+    req.user.id,
+    {$push: {"weatherLocations": newLocation}},
+    {safe: true, upsert: true},
+    function(err, model) {
+        console.log('err', err);
+    }
+  );
+};
+
+exports.deleteUserLocation = function (req, res) {
+  var locId = req.body.id;
+  User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $pullAll: { weatherLocations: [ { "locId": locId } ] }
+    },
+    function(err, model) {
+        console.log('err', err);
+        console.log('model', model);
+    }
+  );
 };
 
 // /**

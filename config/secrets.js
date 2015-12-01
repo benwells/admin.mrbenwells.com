@@ -81,7 +81,8 @@ module.exports = {
     clientID: process.env.GOOGLE_ID || '828110519058.apps.googleusercontent.com',
     clientSecret: process.env.GOOGLE_SECRET || 'JdZsIaWhUFIchmC1a_IZzOHb',
     callbackURL: '/auth/google/callback',
-    passReqToCallback: true
+    passReqToCallback: true,
+    placesApiKey: process.env.PLACES_API_KEY
   },
 
   linkedin: {

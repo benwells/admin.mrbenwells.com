@@ -23,7 +23,11 @@ var userSchema = new mongoose.Schema({
   },
 
   resetPasswordToken: String,
-  resetPasswordExpires: Date
+  resetPasswordExpires: Date,
+  weatherLocations: [{
+    description: { type: String },
+    locId: { type: String }
+  }]
 });
 
 /**

@@ -81,7 +81,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(lusca({
-  csrf: true,
+  csrf: false,
   xframe: 'SAMEORIGIN',
   xssProtection: true
 }));
@@ -156,6 +156,12 @@ app.get('/api/paypal/cancel', apiController.getPayPalCancel);
 app.get('/api/lob', apiController.getLob);
 app.get('/api/bitgo', apiController.getBitGo);
 app.post('/api/bitgo', apiController.postBitGo);
+
+//Weather app endpoints
+app.get('/api/weather/locationsearch/:input', weatherController.locAutocomplete);
+app.get('/api/weather/locations/get', weatherController.getUserLocations);
+app.post('/api/weather/location/add', weatherController.addUserLocation);
+app.post('/api/weather/location/delete', weatherController.deleteUserLocation);
 
 /**
  * OAuth authentication routes. (Sign in)
