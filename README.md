@@ -37,3 +37,12 @@ dashboard for the rest of my projects.
    - run `npm install` to install dependencies
    - `npm start` to start the express server
    - navigate to `http://localhost:3000`
+
+
+##TODO
+
+  - Implement Design for Weather dashboard
+  - Add Career Finder app
+  - Deploy to Openshift
+
+  
