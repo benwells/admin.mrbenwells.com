@@ -27,7 +27,7 @@ dashboard for the rest of my projects.
     * NOTE: Requires a google place API key to be placed in an env variable called `PLACES_API_KEY`
           (see /config/secrets.js) for more info
 
-2. Career Finder (/careers)
+2. (COMING SOON) Career Finder (/careers)
 
     Keep up to date with careers on your favorite careers page!
 

@@ -76,9 +76,13 @@ exports.addUserLocation = function (req, res) {
   User.findByIdAndUpdate(
     req.user.id,
     {$push: {"weatherLocations": newLocation}},
-    {safe: true, upsert: true},
+    {safe: true, upsert: true, new: true},
     function(err, model) {
-        console.log('err', err);
+        if (err) console.log('err', err);
+        var data = {
+          weatherLocations: model.weatherLocations
+        };
+        res.json(data);
     }
   );
 };

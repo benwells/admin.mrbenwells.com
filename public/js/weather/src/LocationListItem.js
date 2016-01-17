@@ -3,6 +3,7 @@ var React = require('react');
 var LocationListItem = React.createClass({
 
   doDelete: function (locationId, e) {
+    console.log('do delete');
     var proceed = confirm("Are you sure you want to delete this location?");
     if (proceed) this.props.doDelete(locationId);
   },
@@ -14,7 +15,7 @@ var LocationListItem = React.createClass({
       <div className={this.props.classes}>
       <span className="deleteBtn" onClick={this.doDelete.bind(null, this.props.locId)}>
         <span>
-          <i className="fa fa-2x fa-trash"/> | 
+          <i className="fa fa-2x fa-trash"/> |
         </span>
       </span>
         <span onClick={this.props.onSelectClick.bind(null, this.props.index)}>{this.props.locationName}</span>

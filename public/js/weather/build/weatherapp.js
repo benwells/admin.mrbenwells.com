@@ -20016,18 +20016,14 @@ var LocationDashboard = React.createClass({displayName: "LocationDashboard",
           locationTitle: this.props.weatherData.title, 
           currently: this.props.weatherData.currently}
         ), 
+
         React.createElement("div", {id: "tabs", className: "tabbable"}, 
           React.createElement("ul", {className: "nav nav-tabs"}, 
-            React.createElement("li", {className: "active"}, React.createElement("a", {href: "#panel-806764", "data-toggle": "tab"}, "Now")), 
-            React.createElement("li", null, React.createElement("a", {href: "#panel-164917", "data-toggle": "tab"}, "Forecast")), 
-            React.createElement("li", null, React.createElement("a", {href: "#panel-164917", "data-toggle": "tab"}, "Radar Map"))
+            React.createElement("li", {className: "active"}, React.createElement("a", {href: "#panel-806764", "data-toggle": "tab"}, "Forecast"))
           ), 
           React.createElement("div", {className: "tab-content"}, 
             React.createElement("div", {id: "panel-806764", className: "tab-pane active"}, 
-              React.createElement("p", null, "I'm in Section 1.")
-            ), 
-            React.createElement("div", {id: "panel-164917", className: "tab-pane"}, 
-              React.createElement("p", null, "Howdy, I'm in Section 2.")
+              React.createElement("p", {dangerouslySetInnerHTML: {__html:this.props.weatherData.description}})
             )
           )
         )
@@ -20103,8 +20099,6 @@ var LocationList = React.createClass({displayName: "LocationList",
   },
 
   render: function () {
-    console.log('locs', locs);
-    console.log('props locs', this.props.locations);
     var locs = [];
     if (this.props.locations.length) {
       locs = this.props.locations.map(function(location, index) {
@@ -20140,6 +20134,7 @@ var React = require('react');
 var LocationListItem = React.createClass({displayName: "LocationListItem",
 
   doDelete: function (locationId, e) {
+    console.log('do delete');
     var proceed = confirm("Are you sure you want to delete this location?");
     if (proceed) this.props.doDelete(locationId);
   },
@@ -20151,7 +20146,7 @@ var LocationListItem = React.createClass({displayName: "LocationListItem",
       React.createElement("div", {className: this.props.classes}, 
       React.createElement("span", {className: "deleteBtn", onClick: this.doDelete.bind(null, this.props.locId)}, 
         React.createElement("span", null, 
-          React.createElement("i", {className: "fa fa-2x fa-trash"}), " |" 
+          React.createElement("i", {className: "fa fa-2x fa-trash"}), " |"
         )
       ), 
         React.createElement("span", {onClick: this.props.onSelectClick.bind(null, this.props.index)}, this.props.locationName)
@@ -20197,9 +20192,10 @@ var WeatherParent = React.createClass({displayName: "WeatherParent",
   },
 
   stateHandler: function(newState, url, type, data) {
-    console.log("NEW STATE", newState);
     //set state if the first arg isn't null
-    if (newState !== null) this.setState(newState);
+    if (newState !== null) {
+      this.setState(newState);
+    }
 
     //get weather data if selected Location just changed
     if ("selectedLocation" in newState) {
@@ -20209,21 +20205,17 @@ var WeatherParent = React.createClass({displayName: "WeatherParent",
       }.bind(this));
     }
 
-    //return if a url is not passed
+    //return if a url is not passed (we only want to set state)
     if (!url) return;
     $.ajax({
       type: type,
       url: url,
       contentType: 'application/json',
       // dataType: 'json',
-      data: JSON.stringify(data)
-      // success: function(data){
-      //     console.log("ajax success", url, data);
-      // },
-      // error: function(){
-      //     console.log("ajax error", url, type);
-      // },
-      // processData: false,
+      data: JSON.stringify(data),
+      success: function(data){
+          if (data.weatherLocations) this.stateHandler({locations: data.weatherLocations})
+      }.bind(this)
     });
   },
 
@@ -20246,13 +20238,11 @@ var WeatherParent = React.createClass({displayName: "WeatherParent",
 
   getWeatherData: function (location) {
 
-    console.log("get weather data location", location);
     var latLong = location.geometry.location.lat + "," + location.geometry.location.lng
     $.simpleWeather({
       location: latLong,
     	unit: 'f',
     	success: function(weather) {
-        console.log("weather", weather);
         this.setState({weatherData: weather});
     	}.bind(this),
     	error: function(error) {

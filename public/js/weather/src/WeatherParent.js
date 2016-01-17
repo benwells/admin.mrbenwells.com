@@ -14,9 +14,10 @@ var WeatherParent = React.createClass({
   },
 
   stateHandler: function(newState, url, type, data) {
-    console.log("NEW STATE", newState);
     //set state if the first arg isn't null
-    if (newState !== null) this.setState(newState);
+    if (newState !== null) {
+      this.setState(newState);
+    }
 
     //get weather data if selected Location just changed
     if ("selectedLocation" in newState) {
@@ -26,21 +27,17 @@ var WeatherParent = React.createClass({
       }.bind(this));
     }
 
-    //return if a url is not passed
+    //return if a url is not passed (we only want to set state)
     if (!url) return;
     $.ajax({
       type: type,
       url: url,
       contentType: 'application/json',
       // dataType: 'json',
-      data: JSON.stringify(data)
-      // success: function(data){
-      //     console.log("ajax success", url, data);
-      // },
-      // error: function(){
-      //     console.log("ajax error", url, type);
-      // },
-      // processData: false,
+      data: JSON.stringify(data),
+      success: function(data){
+          if (data.weatherLocations) this.stateHandler({locations: data.weatherLocations})
+      }.bind(this)
     });
   },
 
@@ -63,13 +60,11 @@ var WeatherParent = React.createClass({
 
   getWeatherData: function (location) {
 
-    console.log("get weather data location", location);
     var latLong = location.geometry.location.lat + "," + location.geometry.location.lng
     $.simpleWeather({
       location: latLong,
     	unit: 'f',
     	success: function(weather) {
-        console.log("weather", weather);
         this.setState({weatherData: weather});
     	}.bind(this),
     	error: function(error) {

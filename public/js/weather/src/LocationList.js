@@ -16,8 +16,6 @@ var LocationList = React.createClass({
   },
 
   render: function () {
-    console.log('locs', locs);
-    console.log('props locs', this.props.locations);
     var locs = [];
     if (this.props.locations.length) {
       locs = this.props.locations.map(function(location, index) {
