@@ -17,15 +17,18 @@ dashboard for the rest of my projects.
 
 1. Weather  (/weather)
 
-    My own personal weather app.  After creating an account, navigate to
-    the "weather" nav menu item for a demo.  Features include:
+    My own personal weather app, built in __*React JS*__.  After creating an account, navigate to
+    the "weather" nav menu item for a demo.  To view the React App, see `/public/js/weather/src`. Features include:
 
     - Adding/Removing Saved locations
     - Viewing the weather for a specific locations
 
 
-    * NOTE: Requires a google place API key to be placed in an env variable called `PLACES_API_KEY`
-          (see /config/secrets.js) for more info
+
+    __NOTE: Requires a google place API key to be placed in an env variable called `PLACES_API_KEY`
+          (see /config/secrets.js) for more info__
+
+
 
 2. (COMING SOON) Career Finder (/careers)
 
@@ -44,5 +47,3 @@ dashboard for the rest of my projects.
   - Implement Design for Weather dashboard
   - Add Career Finder app
   - Deploy to Openshift
-
-  
