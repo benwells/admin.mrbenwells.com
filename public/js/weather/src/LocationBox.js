@@ -5,59 +5,44 @@ var LocationList = require('./LocationList');
 var LocationBox = React.createClass({
 
   handleLocationAdd: function (newLoc) {
-    console.log('handleLocationAdd');
-    console.log('new location', newLoc);
-    console.log('state locations', this.state.locations);
-    var newLocations = this.state.locations.concat([newLoc]);
-    this.setState({
-      locations: newLocations
+    console.log("location add", newLoc);
+    var newLocations = this.props.locations.concat([newLoc]);
+    this.props.stateHandler({ locations: newLocations, searchBoxValue: "" }, '/api/weather/location/add', 'POST', newLoc);
+  },
+
+  handleLocationDelete: function (locationId) {
+    var newLocations = this.props.locations.filter(function(loc){
+      return loc.locId !== locationId;
+    });
+    this.props.stateHandler({ locations: newLocations }, '/api/weather/location/delete', 'POST', { id: locationId });
+  },
+
+  handleLocationSelect: function(index) {
+    //set all locations as unselected
+    var newLocations = this.props.locations.map(function (location) {
+      location.selected = false;
+      return location;
     });
 
-
-    // $.post('/api/weather/location/add', function(result) {
-    //   console.log('result', result);
-    // }.bind(this));
-    $.ajax({
-      type: 'POST',
-      url: '/api/weather/location/add',
-      contentType: 'application/json',
-      // dataType: 'json',
-      data: JSON.stringify(newLoc),
-      success: function(data){
-          console.log("device control succeeded", data);
-      },
-      error: function(){
-          console.log("Device control failed");
-      },
-      // processData: false,
-    }).bind(this);
-  },
-
-
-
-  getInitialState: function () {
-      return {
-        locations: []
-      };
-  },
-
-  componentDidMount: function() {
-    $.get(this.props.source, function(result) {
-      console.log('getting user locations', result.weatherLocations[0]);
-      if (this.isMounted()) {
-        this.setState({
-          locations: result ? result.weatherLocations : []
-        });
-      }
-    }.bind(this));
+    //"select" the single location
+    newLocations[index].selected = 'true';
+    this.props.stateHandler({ locations: newLocations, selectedLocation: newLocations[index] });
   },
 
   render: function () {
     return (
-      <div className="locationBox">
+      <div className="locationBox col-md-4">
         <h3>Locations</h3>
-        <LocationForm addLocClick={this.handleLocationAdd}/>
-        <LocationList locations={this.state.locations}/>
+        <LocationForm
+          addLocClick={this.handleLocationAdd}
+          searchBoxValue={this.props.searchBoxValue}
+        />
+        <LocationList
+          className="location-list"
+          locations={this.props.locations}
+          deleteHandler={this.handleLocationDelete}
+          makeSelected={this.handleLocationSelect}
+        />
       </div>
     )
   }

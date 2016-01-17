@@ -26,7 +26,8 @@ var userSchema = new mongoose.Schema({
   resetPasswordExpires: Date,
   weatherLocations: [{
     description: { type: String },
-    locId: { type: String }
+    locId: { type: String },
+    placeId: { type: String }
   }]
 });
 

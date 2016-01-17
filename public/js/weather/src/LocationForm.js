@@ -2,15 +2,6 @@ var React = require('react'),
     Autosuggest = require('react-autosuggest');
 var LocationForm = React.createClass({
 
-  // addLocation: function (e) {
-  //   var newLoc = this.refs.newLocation.value;
-  //   this.props.addLocClick(newLoc);
-  // },
-
-  // handleKeypress: function (e) {
-  //   var newLoc = this.refs.newLocation.value;
-  //   console.log(newLoc);
-  // },
   getSuggestions: function (input, callback) {
     $.get('/api/weather/locationsearch/' + input, function(suggestions) {
       setTimeout(callback(null, suggestions.predictions), 300); // Emulate API call
@@ -18,11 +9,13 @@ var LocationForm = React.createClass({
   },
   renderSuggestion: function (suggestion, input) { // In this example, 'suggestion' is a string
     return (                                     // and it returns a ReactElement
-      <span><strong>{suggestion.description}</strong></span>
+      <span>{suggestion.description}</span>
     );
   },
   onSuggestionSelected: function(suggestion, event) {
-    console.log('suggestion', suggestion);
+    setTimeout(function(){
+      $('.react-autosuggest input').val('');
+    },100)
     this.props.addLocClick(suggestion);
   },
   getSuggestionValue: function (suggestionObj) {
@@ -30,19 +23,19 @@ var LocationForm = React.createClass({
   },
   render: function () {
     return (
-      <div>
+      <div className="form-group">
         <Autosuggest
           className="form-control"
+          id="search-box"
+          type="text"
+          focusInputOnSuggestionClick={false}
+          value={this.props.searchBoxValue}
           suggestions={this.getSuggestions}
           suggestionRenderer={this.renderSuggestion}
           onSuggestionSelected={this.onSuggestionSelected}
           suggestionValue={this.getSuggestionValue}
           showWhen={input => input.trim().length >= 3}
         />
-        <input id="autocomplete" ref="newLocation" type="text" className="form-control" onKeyUpCapture={this.handleKeypress}/>
-        <button className="btn btn-success" onClick={this.addLocation}>
-  				Add
-  			</button>
       </div>
     )
   }
